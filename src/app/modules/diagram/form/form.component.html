@@ -1,0 +1,68 @@
+<mat-toolbar>
+    <img src="assets/img/logo.png" class="img-logo">
+    <span>C4 Generator DrawIO</span>
+    <span class="example-spacer"></span>
+    <button mat-stroked-button color="primary" class="ml" (click)="onSubmit()">
+        <mat-icon>description</mat-icon>
+        Generar csv
+    </button>
+</mat-toolbar>
+
+<div class="main">
+    <form [formGroup]="dynamicForm">
+        <div formArrayName="elements">
+            <div *ngFor="let element of elements.controls; let i = index" [formGroupName]="i">
+
+                <div class="container" fxLayout="row" fxLayoutAlign="start center">
+
+                    <mat-form-field appearance="outline" class="input-name">
+                        <input matInput placeholder="Nombre de componente" formControlName="name" class="text-size">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="input-type">
+                        <mat-select class="text-size" placeholder="Tipo" formControlName="type">
+                            <mat-option *ngFor="let component of components" [value]="component">
+                                {{component}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="input-color">
+                        <input matInput type="color" placeholder="Color" formControlName="color" class="text-size">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="input-element">
+                        <mat-select formControlName="refs" multiple placeholder="Relación" class="text-size">
+                            <mat-select-trigger>
+                                <span *ngIf="element.get('refs')?.value?.length > 0" class="component-selection">
+                                    {{element.get('refs')?.value?.join(', ')}}
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let ref of reftList" [value]="ref" class="component-selection"
+                                [disabled]="element.get('name')?.value == ref">
+                                {{ref}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="outline" class="input-element">
+                        <input matInput placeholder="Texto de relación" formControlName="text" class="text-size">
+                    </mat-form-field>
+
+                    <button mat-icon-button color="warn" (click)="deleteElement(i); $event.stopPropagation()">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+        <button type="button" mat-stroked-button color="primary" (click)="addElement()">
+            <mat-icon>add</mat-icon>
+            Agregar
+        </button>
+    </form>
+
+</div>

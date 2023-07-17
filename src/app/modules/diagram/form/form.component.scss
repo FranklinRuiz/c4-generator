@@ -1,0 +1,64 @@
+.input-element {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.input-color {
+  width: 30%;
+  margin-right: 10px;
+}
+
+.input-name {
+  width: 60%;
+  margin-right: 10px;
+}
+
+.input-type {
+  width: 50%;
+  margin-right: 10px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.text-size {
+  font-size: 13px !important;
+}
+
+.main {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.ml {
+  margin-left: 10px;
+}
+
+.img-logo {
+  height: 45px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.component-selection {
+  font-size: 13px;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  height: 38px !important;
+}
+
+::ng-deep .mat-mdc-form-field-flex {
+  margin-top: -8px !important;
+}
