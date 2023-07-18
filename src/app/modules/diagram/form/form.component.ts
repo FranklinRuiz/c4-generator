@@ -29,8 +29,56 @@ export class FormComponent {
   }
 
   ngOnInit() {
+    this.loadInitialData();
+  }
+
+  loadInitialData() {
+    let initialData: ElementItem[] = this.getInitialDataFromLocalStorage();
+    this.buildForm(initialData);
+    this.listenForFormChanges();
+  }
+
+  getInitialDataFromLocalStorage(): ElementItem[] {
+    let storedData = localStorage.getItem('elements');
+    let initialData: ElementItem[];
+
+    if (storedData) {
+      initialData = JSON.parse(storedData);
+      this.updateReftList(initialData);
+    } else {
+      initialData = [];
+    }
+
+    return initialData;
+  }
+
+  buildForm(initialData: ElementItem[]) {
     this.dynamicForm = this.fb.group({
-      elements: this.fb.array([])
+      elements: this.fb.array(initialData.map(item => this.fb.group({
+        name: [item.name, Validators.required],
+        type: [item.type, Validators.required],
+        color: [item.color],
+        refs: [item.refs],
+        text: [item.text]
+      })))
+    });
+  }
+
+  listenForFormChanges() {
+    if (this.elements) {
+      this.elements.valueChanges.subscribe(val => {
+        localStorage.setItem('elements', JSON.stringify(val));
+        this.updateReftList(val);
+      });
+    }
+  }
+
+  updateReftList(items: ElementItem[]) {
+    this.reftList = [];
+    items.forEach(item => {
+      if (!!item.name) {
+        this.reftList.push(item.name);
+      }
     });
   }
 
@@ -42,16 +90,6 @@ export class FormComponent {
     if (!this.elements.valid) {
       this.elements.markAllAsTouched();
       return;
-    }
-    let isEmpty = (this.elements.length > 0) ? false : true;
-    if (!isEmpty) {
-      this.reftList = [];
-      this.elements.controls.forEach(element => {
-        let componentName = element.get('name')?.value;
-        if (!!componentName) {
-          this.reftList.push(componentName);
-        }
-      });
     }
 
     this.elements.push(this.fb.group({
@@ -100,4 +138,12 @@ export class FormComponent {
     );
   }
 
+}
+
+interface ElementItem {
+  name: string;
+  type: string;
+  color: string;
+  refs: string[];
+  text: string;
 }
